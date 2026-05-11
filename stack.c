@@ -59,6 +59,71 @@ void loopStack(Stack s)
         p=p->next;
     }
 }
+void interchangSort(Stack s)
+{
+    Node *i,*j;int temp;
+    for(i=s.head;i!=s.tail;i=i->next)
+        for(j=i->next;j!=NULL;j=j->next)
+            if(i->info>j->info)
+            {
+                temp=i->info;
+                i->info=j->info;
+                j->info=temp;
+            }
+}
+Node* searchX(Stack s,int x)
+{
+    Node *p=s.head;
+    while(p!=NULL&&p->info!=x)
+        p=p->next;
+    return p;
+}
+void insertSorted(Stack *s,Node *new)
+{
+    Node *p=s->head,*q=NULL;
+    while((p!=NULL)&&(p->info>new->info))
+    {
+        q=p;p=p->next;
+    }
+    if(q==NULL)
+    {
+        if(s->head==NULL)
+            s->tail=NULL;
+        push(s,new);
+    }
+    else
+    {
+        if(s->tail==NULL)
+            s->tail=new;
+        new->next=p;
+        q->next=new;
+    }
+}
+void deleteX(Stack *s,int x)
+{
+    Node *p=s->head,*q=NULL;
+    while((p!=NULL)&&(p->info!=x))
+    {
+        q=p;p=p->next;
+    }
+    if(p!=NULL)
+    {
+        if(q==NULL)
+        {
+            if(s->head==NULL)
+                s->tail=NULL;
+            p->next=s->head;
+            free(p);
+        }
+        else
+        {
+            if(s->tail==NULL)
+                s->tail=q;
+            q->next=p->next;
+            free(p);
+        }
+    }
+}
 int main()
 {
     Stack s;Node *p;
@@ -71,12 +136,22 @@ int main()
     }
     printf("\nMy stack: ");
     loopStack(s);
-    int x;
-    pop(&s,&x);
-    printf("\nStack sau khi pop so %d la: ",x);
+    int x=17;
+    Node *q=createNode(x);
+    insertSorted(&s,q);
+    printf("\nStack sau khi them so %d vao la: ",x);
     loopStack(s);
-    pop(&s,&x);
-    printf("\nStack sau khi pop so %d la: ",x);
+    deleteX(&s,x);
+    printf("\nStack sau khi xoa so %d la: ",x);
     loopStack(s);
+    printf("\nStack sau khi sort la: ");
+    interchangSort(s);
+    loopStack(s);
+    // pop(&s,&x);
+    // printf("\nStack sau khi pop so %d la: ",x);
+    // loopStack(s);
+    // pop(&s,&x);
+    // printf("\nStack sau khi pop so %d la: ",x);
+    // loopStack(s);
     return 0;
 }

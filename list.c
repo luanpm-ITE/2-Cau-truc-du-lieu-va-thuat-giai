@@ -24,7 +24,7 @@ void destroyList(List);
 int main()
 {
     List l;Node *p;
-    int a[]={1,2,4,8,16,32};
+    int a[]={5,3,4,2,16,32};
     createList(&l);
     for(int i=0;i<6;++i)
     {
@@ -33,7 +33,23 @@ int main()
     }
     printf("\nMy list: ");
     loopList(l);
-
+    Node *q;
+    int x=1;
+    q=createNode(x);
+    insertSortedList(&l,q);
+    printf("\nList sau khi chen so %d vao la: ",q->info);
+    loopList(l);
+    if(searchX(l,x)!=NULL)
+        printf("\nTim thay so %d trong list",x);
+    else printf("\nTim khong thay x");
+    deleteX(&l,1);
+    printf("\nList sau khi xoa so %d la: ",x);
+    loopList(l);
+    printf("\nList sau khi sort la: ");
+    sortList(l);
+    loopList(l);
+    printf("\nList sau khi pha huy la: ");
+    destroyList(l);
     return 0;
 }
 void createList(List *l)
@@ -105,7 +121,7 @@ Node* searchX(List l,int x)
 void insertSortedList(List *l,Node *new)
 {
     Node *p=l->head,*q=NULL;
-    while((p!=NULL)&&(p->info!=new->info))
+    while((p!=NULL)&&(p->info<new->info))
     {
         q=p;
         p=p->next;
@@ -120,7 +136,7 @@ void insertSortedList(List *l,Node *new)
     {
         if(l->tail==NULL)
             l->tail=new;
-        q->next=new->next;
+        new->next=p;
         q->next=new;
     }
 }
@@ -138,8 +154,7 @@ void deleteX(List *l,int x)
         {
             if(l->head==NULL)
                 l->tail=NULL;
-            p=l->head;
-            p=p->next;
+            l->head=p->next;
             free(p);
         }
         else
